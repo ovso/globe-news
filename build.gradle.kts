@@ -4,5 +4,6 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.googleDevtoolsKsp)  apply false
+    alias(libs.plugins.daggerHiltAndroid) version libs.versions.hilt apply false
 }
 true // Needed to make the Suppress annotation work for the plugins block
