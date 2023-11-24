@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.ApplicationBuildType
+import org.jetbrains.kotlin.konan.properties.loadProperties
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
@@ -26,19 +29,28 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+            setupApiKeyFromProperties()
+        }
+/*
+        debug {
+            setupApiKeyFromProperties()
+        }
+*/
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     packaging {
         resources {
@@ -64,4 +76,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+fun ApplicationBuildType.setupApiKeyFromProperties() {
+    val properties = loadProperties("key.properties")
+    val apiKey = properties["API_KEY"].toString()
+    println("apiKey = $apiKey")
+    buildConfigField("String", "API_KEY", "\"$apiKey\"")
 }
