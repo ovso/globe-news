@@ -34,11 +34,6 @@ android {
         debug {
             setupApiKeyFromProperties()
         }
-/*
-        debug {
-            setupApiKeyFromProperties()
-        }
-*/
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -90,8 +85,10 @@ dependencies {
 }
 
 fun ApplicationBuildType.setupApiKeyFromProperties() {
-    val properties = loadProperties("key.properties")
+    val properties = loadProperties("secrets.properties")
     val apiKey = properties["API_KEY"].toString()
-    println("apiKey = $apiKey")
+    val backEndUrl = properties["BACKEND_URL"].toString()
+    println("apiKey = $apiKey, backEndUrl = $backEndUrl")
     buildConfigField("String", "API_KEY", "\"$apiKey\"")
+    buildConfigField("String", "BACKEND_URL", "\"$backEndUrl\"")
 }
