@@ -1,4 +1,4 @@
-package io.github.ovso.globenews.ui.theme
+package io.github.ovso.globenews.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

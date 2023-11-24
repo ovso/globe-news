@@ -1,4 +1,4 @@
-package io.github.ovso.globenews.ui.theme
+package io.github.ovso.globenews.core.ui.theme
 
 import android.app.Activity
 import android.os.Build
