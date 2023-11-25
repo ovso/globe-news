@@ -5,13 +5,16 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -21,10 +24,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import io.github.ovso.globenews.core.network.Article
 
 @Composable
@@ -40,8 +47,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(all = 16.dp),
-                text = "Headlines",
-                style = MaterialTheme.typography.titleLarge
+                text = "헤드라인",
+                style = MaterialTheme.typography.headlineLarge
             )
         },
         content = {
@@ -82,33 +89,66 @@ private fun HomeContent(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(articles) { article ->
-            ArticleCard(article)
+            ArticleCard(
+                modifier = Modifier.height(300.dp),
+                imgUrl = article.urlToImage.orEmpty(),
+                title = article.title.orEmpty(),
+                publishedAt = article.publishedAt.orEmpty()
+            )
         }
     }
 }
 
 @Composable
-private fun ArticleCard(article: Article) {
+private fun ArticleCard(
+    modifier: Modifier,
+    imgUrl: String,
+    title: String,
+    publishedAt: String,
+) {
     ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp),
+        modifier = modifier
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 1.dp
         ),
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
 
                 },
         ) {
-            Text(
-                text = article.title.orEmpty(),
+            Card(
                 modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
+                    .fillMaxWidth()
+                    .height(180.dp)
+            ) {
+                AsyncImage(
+                    contentScale = ContentScale.FillWidth,
+                    model = imgUrl,
+                    contentDescription = "썸네일 이미지"
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = title,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = publishedAt,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp),
+                textAlign = TextAlign.End
             )
         }
     }
@@ -119,3 +159,4 @@ private fun ArticleCard(article: Article) {
 private fun PreviewHomeScreen() {
     HomeScreen(state = HomeUiState.Loading)
 }
+

@@ -68,13 +68,18 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // DI
     implementation(libs.bundles.hilt)
     ksp(libs.hilt.compiler)
 
+    // Network
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlin.serialization)
+
+    // Image
+    implementation(libs.coil.kt.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
