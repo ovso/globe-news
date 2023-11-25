@@ -1,7 +1,10 @@
 package io.github.ovso.globenews.feature.home
 
 import android.app.Activity
+import android.content.Intent
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import io.github.ovso.globenews.core.network.Article
+import io.github.ovso.globenews.feature.web.WebActivity
+
 
 @Composable
 fun HomeScreen(
@@ -44,7 +49,10 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val isWideScreen = (LocalConfiguration.current.screenWidthDp.dp > 600.dp)
-    println(LocalConfiguration.current.screenWidthDp.dp)
+
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {}
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -57,13 +65,27 @@ fun HomeScreen(
             )
         },
         content = {
+            fun onItemClick(article: Article) {
+                launcher.launch(Intent(context, WebActivity::class.java).apply { putExtra("url", article.url) })
+            }
             when (state) {
                 is HomeUiState.Loading ->
                     HomeLoading(modifier = Modifier.padding(it))
 
                 is HomeUiState.Success -> {
-                    if (isWideScreen) WideHomeContent(modifier = Modifier.padding(it), state.articles)
-                    else HomeContent(modifier = Modifier.padding(it), state.articles)
+                    if (isWideScreen) {
+                        WideHomeContent(
+                            modifier = Modifier.padding(it),
+                            articles = state.articles,
+                            onItemClick = ::onItemClick
+                        )
+                    } else {
+                        HomeContent(
+                            modifier = Modifier.padding(it),
+                            articles = state.articles,
+                            onItemClick = ::onItemClick
+                        )
+                    }
                 }
             }
         }
@@ -88,6 +110,7 @@ private fun HomeLoading(modifier: Modifier = Modifier) {
 private fun HomeContent(
     modifier: Modifier = Modifier,
     articles: List<Article>,
+    onItemClick: (Article) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -101,7 +124,9 @@ private fun HomeContent(
                 imgUrl = article.urlToImage.orEmpty(),
                 title = article.title.orEmpty(),
                 publishedAt = article.publishedAt.orEmpty()
-            )
+            ) {
+                onItemClick(article)
+            }
         }
     }
 }
@@ -110,6 +135,7 @@ private fun HomeContent(
 private fun WideHomeContent(
     modifier: Modifier = Modifier,
     articles: List<Article>,
+    onItemClick: (Article) -> Unit = {},
 ) {
     LazyVerticalGrid(
         modifier = modifier
@@ -125,7 +151,9 @@ private fun WideHomeContent(
                 imgUrl = article.urlToImage.orEmpty(),
                 title = article.title.orEmpty(),
                 publishedAt = article.publishedAt.orEmpty()
-            )
+            ) {
+                onItemClick(article)
+            }
         }
     }
 }
@@ -136,6 +164,7 @@ private fun ArticleCard(
     imgUrl: String,
     title: String,
     publishedAt: String,
+    onClick: () -> Unit = {},
 ) {
     ElevatedCard(
         modifier = modifier
@@ -147,9 +176,7 @@ private fun ArticleCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable {
-
-                },
+                .clickable(onClick = onClick),
         ) {
             Card(
                 modifier = Modifier
@@ -184,6 +211,7 @@ private fun ArticleCard(
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun PreviewHomeScreen() {
