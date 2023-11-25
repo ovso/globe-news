@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleDevtoolsKsp)
     alias(libs.plugins.daggerHiltAndroid)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -70,9 +71,9 @@ dependencies {
     implementation(libs.bundles.hilt)
     ksp(libs.hilt.compiler)
 
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit.core)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlin.serialization)
 
     testImplementation(libs.junit)
