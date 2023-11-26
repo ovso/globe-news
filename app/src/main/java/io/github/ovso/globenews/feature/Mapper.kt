@@ -4,13 +4,6 @@ import io.github.ovso.globenews.core.database.model.ArticleEntity
 import io.github.ovso.globenews.core.network.ArticleResponse
 import io.github.ovso.globenews.feature.home.ArticleUiModel
 
-fun ArticleResponse.asArticleUiModel() = ArticleUiModel(
-    publishedAt = publishedAt,
-    title = title,
-    url = url,
-    urlToImage = urlToImage,
-)
-
 fun ArticleUiModel.asArticleEntity() = ArticleEntity(
     publishedAt = publishedAt,
     title = title,
@@ -24,7 +17,7 @@ fun ArticleResponse.asArticleEntity() = ArticleEntity(
     title = title,
     url = url,
     urlToImage = urlToImage,
-    viewed = false,
+    viewed = 0,
 )
 fun ArticleEntity.asArticleUiModel() = ArticleUiModel(
     publishedAt = publishedAt,

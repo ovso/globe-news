@@ -26,7 +26,10 @@ class MainActivity : ComponentActivity() {
                 val viewModel: HomeViewModel = hiltViewModel()
                 val state by viewModel.uiState.collectAsState()
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    HomeScreen(state = state,)
+                    HomeScreen(
+                        state = state,
+                        onEvent = viewModel::onEvent
+                    )
                 }
             }
         }

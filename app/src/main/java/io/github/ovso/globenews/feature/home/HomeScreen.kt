@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +46,7 @@ import io.github.ovso.globenews.feature.web.WebActivity
 fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeUiState,
+    onEvent: (OnEvent) -> Unit = {},
 ) {
     val context = LocalContext.current
     val isWideScreen = (LocalConfiguration.current.screenWidthDp.dp > 600.dp)
@@ -66,6 +68,7 @@ fun HomeScreen(
         content = {
             fun onItemClick(article: ArticleUiModel) {
                 launcher.launch(Intent(context, WebActivity::class.java).apply { putExtra("url", article.url) })
+                onEvent(OnEvent.OnItemClick(article))
             }
             when (state) {
                 is HomeUiState.Loading ->
@@ -122,7 +125,8 @@ private fun HomeContent(
                 modifier = Modifier.height(300.dp),
                 imgUrl = article.urlToImage.orEmpty(),
                 title = article.title.orEmpty(),
-                publishedAt = article.publishedAt.orEmpty()
+                publishedAt = article.publishedAt,
+                viewed = article.viewed
             ) {
                 onItemClick(article)
             }
@@ -149,7 +153,8 @@ private fun WideHomeContent(
                 modifier = Modifier.fillMaxWidth(),
                 imgUrl = article.urlToImage.orEmpty(),
                 title = article.title.orEmpty(),
-                publishedAt = article.publishedAt.orEmpty()
+                publishedAt = article.publishedAt,
+                viewed = article.viewed
             ) {
                 onItemClick(article)
             }
@@ -163,8 +168,10 @@ private fun ArticleCard(
     imgUrl: String,
     title: String,
     publishedAt: String,
+    viewed: Int = 0,
     onClick: () -> Unit = {},
 ) {
+    val titleColor = if (viewed == 1) Color.Red else Color.Unspecified
     ElevatedCard(
         modifier = modifier
             .fillMaxWidth(),
@@ -197,6 +204,7 @@ private fun ArticleCard(
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
+                color = titleColor
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(

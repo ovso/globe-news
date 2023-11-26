@@ -4,8 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import io.github.ovso.globenews.core.database.model.ArticleEntity
 import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface ArticleDao {
     @Query("SELECT * FROM article_table")
@@ -16,6 +18,10 @@ interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(articles: List<ArticleEntity>)
+
+    @Upsert
+    suspend fun upsert(article: ArticleEntity)
+
     @Query("DELETE FROM article_table")
     suspend fun clearData()
 }

@@ -10,9 +10,8 @@ class OfflineTopHeadlinesDataSourceImpl @Inject constructor(
 ): OfflineTopHeadlinesDataSource {
     override fun getArticles(): Flow<List<ArticleEntity>> = dao.getArticles()
 
-    override suspend fun insert(article: ArticleEntity) = dao.insert(article)
-
     override suspend fun insertAll(articles: List<ArticleEntity>) = dao.insertAll(articles)
+    override suspend fun upsert(article: ArticleEntity) = dao.upsert(article)
 
     override suspend fun clearData() = dao.clearData()
 }
