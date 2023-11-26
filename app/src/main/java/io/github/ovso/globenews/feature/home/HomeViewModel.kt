@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.ovso.globenews.core.data.NewsRepository
+import io.github.ovso.globenews.core.data.OfflineNewsRepository
 import io.github.ovso.globenews.core.network.ArticleResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository,
+    private val offlineNewsRepository: OfflineNewsRepository,
 ): ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
