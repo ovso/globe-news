@@ -1,9 +1,14 @@
 package io.github.ovso.globenews.core.network
 
+import android.content.Context
+import coil.ImageLoader
+import coil.disk.DiskCache
+import coil.util.DebugLogger
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.ovso.globenews.BuildConfig
 import kotlinx.serialization.json.Json
@@ -52,5 +57,26 @@ object NetworkModule {
             networkJson.asConverterFactory("application/json".toMediaType()),
         )
         .callFactory(okhttpCallFactory)
+        .build()
+
+    @Provides
+    @Singleton
+    fun imageLoader(
+        okHttpCallFactory: Call.Factory,
+        @ApplicationContext context: Context,
+    ): ImageLoader = ImageLoader.Builder(context)
+        .callFactory(okHttpCallFactory)
+        .respectCacheHeaders(false)
+        .diskCache {
+            DiskCache.Builder()
+                .directory(context.cacheDir.resolve("image_cache"))
+                .maxSizePercent(0.02)
+                .build()
+        }
+        .apply {
+            if (BuildConfig.DEBUG) {
+                logger(DebugLogger())
+            }
+        }
         .build()
 }
