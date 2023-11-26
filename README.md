@@ -5,6 +5,7 @@
 - Room
 - Retrofit + Kotlin Serialization
 - Hilt
+- UseCase + Repository
 - Compose + MVI
 - KSP
 - Android Studio(Stable ~ Canary)
