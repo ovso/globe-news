@@ -14,7 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-private const val NIA_BASE_URL = BuildConfig.BACKEND_URL
+private const val BASE_URL = BuildConfig.BACKEND_URL
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -39,15 +39,15 @@ object NetworkModule {
 
 
     @Provides
-    fun providesNewsService(retrofit: Retrofit): NewsNetworkApi =
-        retrofit.create(NewsNetworkApi::class.java)
+    fun providesTopHeadlinesService(retrofit: Retrofit): TopHeadlinesApi =
+        retrofit.create(TopHeadlinesApi::class.java)
     @Provides
     @Singleton
     fun providesRetrofit(
         networkJson: Json,
         okhttpCallFactory: Call.Factory,
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(NIA_BASE_URL)
+        .baseUrl(BASE_URL)
         .addConverterFactory(
             networkJson.asConverterFactory("application/json".toMediaType()),
         )

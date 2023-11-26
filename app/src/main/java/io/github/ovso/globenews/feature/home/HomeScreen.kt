@@ -38,7 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import io.github.ovso.globenews.core.network.Article
+import io.github.ovso.globenews.core.network.ArticleResponse
 import io.github.ovso.globenews.feature.web.WebActivity
 
 
@@ -65,7 +65,7 @@ fun HomeScreen(
             )
         },
         content = {
-            fun onItemClick(article: Article) {
+            fun onItemClick(article: ArticleResponse) {
                 launcher.launch(Intent(context, WebActivity::class.java).apply { putExtra("url", article.url) })
             }
             when (state) {
@@ -109,8 +109,8 @@ private fun HomeLoading(modifier: Modifier = Modifier) {
 @Composable
 private fun HomeContent(
     modifier: Modifier = Modifier,
-    articles: List<Article>,
-    onItemClick: (Article) -> Unit = {},
+    articles: List<ArticleResponse>,
+    onItemClick: (ArticleResponse) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -134,8 +134,8 @@ private fun HomeContent(
 @Composable
 private fun WideHomeContent(
     modifier: Modifier = Modifier,
-    articles: List<Article>,
-    onItemClick: (Article) -> Unit = {},
+    articles: List<ArticleResponse>,
+    onItemClick: (ArticleResponse) -> Unit = {},
 ) {
     LazyVerticalGrid(
         modifier = modifier

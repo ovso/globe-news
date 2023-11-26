@@ -1,10 +1,10 @@
 package io.github.ovso.globenews.core.data
 
-import io.github.ovso.globenews.core.network.Article
+import io.github.ovso.globenews.core.network.ArticleResponse
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
-    private val remoteDataSource: NewsRemoteDataSource,
+    private val dataSource: TopHeadlinesDataSource,
 ) : NewsRepository {
-    override suspend fun getNews(): List<Article> = remoteDataSource.getNews()
+    override suspend fun getTopHeadlines(): List<ArticleResponse> = dataSource.getArticles()
 }

@@ -4,10 +4,10 @@ import io.github.ovso.globenews.core.database.dao.ArticleDao
 import io.github.ovso.globenews.core.database.model.ArticleEntity
 import kotlinx.coroutines.flow.Flow
 
-class NewsLocalDataSourceImpl(
+class OfflineTopHeadlinesDataSourceImpl(
     private val dao: ArticleDao
-): NewsLocalDataSource {
-    override suspend fun getArticles(): Flow<List<ArticleEntity>> = dao.getArticles()
+): OfflineTopHeadlinesDataSource {
+    override fun getArticles(): Flow<List<ArticleEntity>> = dao.getArticles()
 
     override suspend fun insert(article: ArticleEntity) = dao.insert(article)
 

@@ -5,7 +5,10 @@ import androidx.room.RoomDatabase
 import io.github.ovso.globenews.core.database.dao.ArticleDao
 import io.github.ovso.globenews.core.database.model.ArticleEntity
 
-@Database(entities = [ArticleEntity::class], version = 1)
+@Database(
+    entities = [ArticleEntity::class],
+    version = 1,
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun articleDao(): ArticleDao
 }

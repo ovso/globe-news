@@ -13,8 +13,8 @@ interface DataModule {
         newsRepository: NewsRepositoryImpl,
     ): NewsRepository
     @Binds
-    fun bindsNewsDataSource(
-        newsRemoteDataSource: NewsRemoteDataSourceImpl,
-    ): NewsRemoteDataSource
+    fun bindsTopHeadlinesDataSource(
+        dataSource: TopHeadlinesDataSourceImpl,
+    ): TopHeadlinesDataSource
 
 }
